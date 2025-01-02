@@ -21,6 +21,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".HistoireListActivity" />
+        <activity android:name=".AddHistoireActivity" />
+
+
+        <activity android:name=".AuteurListActivity" />
+        <activity android:name=".AddAuteurActivity" />
+
+        <activity android:name=".PaysListActivity" />
+        <activity android:name=".AddPaysActivity" />
+
+        <!-- Activités Categorie -->
+        <activity android:name=".CategorieListActivity" />
+        <activity android:name=".AddCategorieActivity" />
     </application>
 
 </manifest>

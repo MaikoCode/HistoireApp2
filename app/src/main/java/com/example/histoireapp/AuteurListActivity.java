@@ -7,31 +7,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.histoireapp.R;
-import com.example.histoireapp.HistoireAdapter;
+import com.example.histoireapp.AuteurAdapter;
 import com.example.histoireapp.DatabaseHelper;
-import com.example.histoireapp.Histoire;
+import com.example.histoireapp.Auteur;
 import java.util.List;
 
-public class HistoireListActivity extends AppCompatActivity {
+public class AuteurListActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private RecyclerView recyclerView;
-    private HistoireAdapter adapter;
+    private AuteurAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_histoire_list);
+        setContentView(R.layout.activity_auteur_list);
 
         db = new DatabaseHelper(this);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        loadHistoires();
+        loadAuteurs();
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AddHistoireActivity.class);
+            Intent intent = new Intent(this, AddAuteurActivity.class);
             startActivity(intent);
         });
     }
@@ -39,12 +39,12 @@ public class HistoireListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadHistoires();
+        loadAuteurs();
     }
 
-    private void loadHistoires() {
-        List<Histoire> histoires = db.getAllHistoires();
-        adapter = new HistoireAdapter(this, histoires);
+    private void loadAuteurs() {
+        List<Auteur> auteurs = db.getAllAuteurs();
+        adapter = new AuteurAdapter(this, auteurs);
         recyclerView.setAdapter(adapter);
     }
 }

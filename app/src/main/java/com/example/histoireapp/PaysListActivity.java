@@ -7,31 +7,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.histoireapp.R;
-import com.example.histoireapp.HistoireAdapter;
+import com.example.histoireapp.PaysAdapter;
 import com.example.histoireapp.DatabaseHelper;
-import com.example.histoireapp.Histoire;
+import com.example.histoireapp.Pays;
 import java.util.List;
 
-public class HistoireListActivity extends AppCompatActivity {
+public class PaysListActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private RecyclerView recyclerView;
-    private HistoireAdapter adapter;
+    private PaysAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_histoire_list);
+        setContentView(R.layout.activity_pays_list);
 
         db = new DatabaseHelper(this);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        loadHistoires();
+        loadPays();
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AddHistoireActivity.class);
+            Intent intent = new Intent(this, AddPaysActivity.class);
             startActivity(intent);
         });
     }
@@ -39,12 +39,12 @@ public class HistoireListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadHistoires();
+        loadPays();
     }
 
-    private void loadHistoires() {
-        List<Histoire> histoires = db.getAllHistoires();
-        adapter = new HistoireAdapter(this, histoires);
+    private void loadPays() {
+        List<Pays> paysList = db.getAllPays();
+        adapter = new PaysAdapter(this, paysList);
         recyclerView.setAdapter(adapter);
     }
 }

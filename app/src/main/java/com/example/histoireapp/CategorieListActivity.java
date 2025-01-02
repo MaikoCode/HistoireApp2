@@ -7,31 +7,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.histoireapp.R;
-import com.example.histoireapp.HistoireAdapter;
+import com.example.histoireapp.CategorieAdapter;
 import com.example.histoireapp.DatabaseHelper;
-import com.example.histoireapp.Histoire;
+import com.example.histoireapp.Categorie;
 import java.util.List;
 
-public class HistoireListActivity extends AppCompatActivity {
+public class CategorieListActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private RecyclerView recyclerView;
-    private HistoireAdapter adapter;
+    private CategorieAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_histoire_list);
+        setContentView(R.layout.activity_categorie_list);
 
         db = new DatabaseHelper(this);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        loadHistoires();
+        loadCategories();
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AddHistoireActivity.class);
+            Intent intent = new Intent(this, AddCategorieActivity.class);
             startActivity(intent);
         });
     }
@@ -39,12 +39,12 @@ public class HistoireListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadHistoires();
+        loadCategories();
     }
 
-    private void loadHistoires() {
-        List<Histoire> histoires = db.getAllHistoires();
-        adapter = new HistoireAdapter(this, histoires);
+    private void loadCategories() {
+        List<Categorie> categories = db.getAllCategories();
+        adapter = new CategorieAdapter(this, categories);
         recyclerView.setAdapter(adapter);
     }
 }
