@@ -1,5 +1,6 @@
 package com.example.histoireapp;
 
+import android.content.Intent;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,9 @@ public class HistoireAdapter extends RecyclerView.Adapter<HistoireAdapter.ViewHo
         holder.tvCategorie.setText(categorieName);
 
         holder.btnEdit.setOnClickListener(v -> {
-            // Will be implemented
+            Intent intent = new Intent(context, AddHistoireActivity.class);
+            intent.putExtra("HISTOIRE_ID", histoire.getId());
+            context.startActivity(intent);
         });
 
         holder.btnDelete.setOnClickListener(v -> {

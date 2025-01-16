@@ -1,5 +1,6 @@
 package com.example.histoireapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -7,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.histoireapp.R;
 import com.example.histoireapp.DatabaseHelper;
 import com.example.histoireapp.Histoire;
@@ -18,6 +20,7 @@ public class AddHistoireActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private EditText etTitre, etContenu;
     private Spinner spinnerAuteur, spinnerCategorie;
+    private int histoireId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,7 @@ public class AddHistoireActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
 
+        // Initialize views
         etTitre = findViewById(R.id.etTitre);
         etContenu = findViewById(R.id.etContenu);
         spinnerAuteur = findViewById(R.id.spinnerAuteur);
@@ -34,6 +38,22 @@ public class AddHistoireActivity extends AppCompatActivity {
 
         // Load spinners
         loadSpinners();
+
+        // Check if we're editing an existing histoire
+        histoireId = getIntent().getIntExtra("HISTOIRE_ID", -1);
+        if (histoireId != -1) {
+            // Load histoire data
+            Histoire histoire = db.getHistoire(histoireId);
+            etTitre.setText(histoire.getTitre());
+            etContenu.setText(histoire.getContenu());
+
+            // Set spinners selection
+            setSpinnerSelection(spinnerAuteur, histoire.getAuteurId());
+            setSpinnerSelection(spinnerCategorie, histoire.getCategorieId());
+
+            // Change button text
+            btnSave.setText("Modifier");
+        }
 
         btnSave.setOnClickListener(v -> saveHistoire());
     }
@@ -54,6 +74,19 @@ public class AddHistoireActivity extends AppCompatActivity {
         spinnerCategorie.setAdapter(categorieAdapter);
     }
 
+    private void setSpinnerSelection(Spinner spinner, int id) {
+        for (int i = 0; i < spinner.getAdapter().getCount(); i++) {
+            Object item = spinner.getAdapter().getItem(i);
+            if (item instanceof Auteur && ((Auteur) item).getId() == id) {
+                spinner.setSelection(i);
+                break;
+            } else if (item instanceof Categorie && ((Categorie) item).getId() == id) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
     private void saveHistoire() {
         String titre = etTitre.getText().toString().trim();
         String contenu = etContenu.getText().toString().trim();
@@ -66,14 +99,24 @@ public class AddHistoireActivity extends AppCompatActivity {
         Auteur selectedAuteur = (Auteur) spinnerAuteur.getSelectedItem();
         Categorie selectedCategorie = (Categorie) spinnerCategorie.getSelectedItem();
 
-        Histoire histoire = new Histoire(titre, contenu, selectedAuteur.getId(), selectedCategorie.getId());
+        Histoire histoire = new Histoire(titre, contenu,
+                selectedAuteur.getId(),
+                selectedCategorie.getId());
 
-        long result = db.insertHistoire(histoire);
+        long result;
+        if (histoireId != -1) {
+            histoire.setId(histoireId);
+            result = db.updateHistoire(histoire);
+            Toast.makeText(this, "Histoire modifiée avec succès", Toast.LENGTH_SHORT).show();
+        } else {
+            result = db.insertHistoire(histoire);
+            Toast.makeText(this, "Histoire créée avec succès", Toast.LENGTH_SHORT).show();
+        }
+
         if (result != -1) {
-            Toast.makeText(this, "Histoire enregistrée avec succès", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(this, "Erreur lors de l'enregistrement", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erreur lors de l'opération", Toast.LENGTH_SHORT).show();
         }
     }
 }
