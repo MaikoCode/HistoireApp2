@@ -12,6 +12,7 @@ import com.example.histoireapp.R;
 import com.example.histoireapp.Auteur;
 import com.example.histoireapp.DatabaseHelper;
 import java.util.List;
+import android.content.Intent;
 
 public class AuteurAdapter extends RecyclerView.Adapter<AuteurAdapter.ViewHolder> {
     private List<Auteur> auteurs;
@@ -43,7 +44,9 @@ public class AuteurAdapter extends RecyclerView.Adapter<AuteurAdapter.ViewHolder
         holder.tvPays.setText(paysName);
 
         holder.btnEdit.setOnClickListener(v -> {
-            // Will be implemented
+            Intent intent = new Intent(context, AddAuteurActivity.class);
+            intent.putExtra("AUTEUR_ID", auteur.getId());
+            context.startActivity(intent);
         });
 
         holder.btnDelete.setOnClickListener(v -> {

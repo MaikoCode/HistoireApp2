@@ -1,5 +1,6 @@
 package com.example.histoireapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import com.example.histoireapp.Pays;
 public class AddPaysActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private EditText etNom;
+    private int paysId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,17 @@ public class AddPaysActivity extends AppCompatActivity {
         db = new DatabaseHelper(this);
         etNom = findViewById(R.id.etNom);
         Button btnSave = findViewById(R.id.btnSave);
+
+        // Check if we're editing an existing pays
+        paysId = getIntent().getIntExtra("PAYS_ID", -1);
+        if (paysId != -1) {
+            // Load pays data
+            Pays pays = db.getPays(paysId);
+            etNom.setText(pays.getNom());
+
+            // Change button text
+            btnSave.setText("Modifier");
+        }
 
         btnSave.setOnClickListener(v -> savePays());
     }
@@ -34,13 +47,21 @@ public class AddPaysActivity extends AppCompatActivity {
         }
 
         Pays pays = new Pays(nom);
-        long result = db.insertPays(pays);
+        long result;
+
+        if (paysId != -1) {
+            pays.setId(paysId);
+            result = db.updatePays(pays);
+            Toast.makeText(this, "Pays modifié avec succès", Toast.LENGTH_SHORT).show();
+        } else {
+            result = db.insertPays(pays);
+            Toast.makeText(this, "Pays créé avec succès", Toast.LENGTH_SHORT).show();
+        }
 
         if (result != -1) {
-            Toast.makeText(this, "Pays enregistré avec succès", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(this, "Erreur lors de l'enregistrement", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erreur lors de l'opération", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -12,6 +12,7 @@ import com.example.histoireapp.R;
 import com.example.histoireapp.Pays;
 import com.example.histoireapp.DatabaseHelper;
 import java.util.List;
+import android.content.Intent;
 
 public class PaysAdapter extends RecyclerView.Adapter<PaysAdapter.ViewHolder> {
     private List<Pays> paysList;
@@ -38,7 +39,9 @@ public class PaysAdapter extends RecyclerView.Adapter<PaysAdapter.ViewHolder> {
         holder.tvNom.setText(pays.getNom());
 
         holder.btnEdit.setOnClickListener(v -> {
-            // Will be implemented
+            Intent intent = new Intent(context, AddPaysActivity.class);
+            intent.putExtra("PAYS_ID", pays.getId());
+            context.startActivity(intent);
         });
 
         holder.btnDelete.setOnClickListener(v -> {

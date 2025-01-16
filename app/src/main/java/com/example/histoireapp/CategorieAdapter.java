@@ -12,6 +12,7 @@ import com.example.histoireapp.R;
 import com.example.histoireapp.Categorie;
 import com.example.histoireapp.DatabaseHelper;
 import java.util.List;
+import android.content.Intent;
 
 public class CategorieAdapter extends RecyclerView.Adapter<CategorieAdapter.ViewHolder> {
     private List<Categorie> categories;
@@ -37,8 +38,13 @@ public class CategorieAdapter extends RecyclerView.Adapter<CategorieAdapter.View
         Categorie categorie = categories.get(position);
         holder.tvNom.setText(categorie.getNom());
 
+//        holder.btnEdit.setOnClickListener(v -> {
+//            // Will be implemented
+//        });
         holder.btnEdit.setOnClickListener(v -> {
-            // Will be implemented
+            Intent intent = new Intent(context, AddCategorieActivity.class);
+            intent.putExtra("CATEGORIE_ID", categorie.getId());
+            context.startActivity(intent);
         });
 
         holder.btnDelete.setOnClickListener(v -> {

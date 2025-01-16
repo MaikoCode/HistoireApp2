@@ -12,6 +12,7 @@ import com.example.histoireapp.Categorie;
 public class AddCategorieActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private EditText etNom;
+    private int categorieId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,17 @@ public class AddCategorieActivity extends AppCompatActivity {
         db = new DatabaseHelper(this);
         etNom = findViewById(R.id.etNom);
         Button btnSave = findViewById(R.id.btnSave);
+
+        // Check if we're editing an existing categorie
+        categorieId = getIntent().getIntExtra("CATEGORIE_ID", -1);
+        if (categorieId != -1) {
+            // Load categorie data
+            Categorie categorie = db.getCategorie(categorieId);
+            etNom.setText(categorie.getNom());
+
+            // Change button text
+            btnSave.setText("Modifier");
+        }
 
         btnSave.setOnClickListener(v -> saveCategorie());
     }
@@ -34,13 +46,27 @@ public class AddCategorieActivity extends AppCompatActivity {
         }
 
         Categorie categorie = new Categorie(nom);
-        long result = db.insertCategorie(categorie);
+        boolean success = false;
 
-        if (result != -1) {
-            Toast.makeText(this, "Catégorie enregistrée avec succès", Toast.LENGTH_SHORT).show();
+        if (categorieId != -1) {
+            categorie.setId(categorieId);
+            int updateResult = db.updateCategorie(categorie);
+            success = (updateResult > 0);
+            if (success) {
+                Toast.makeText(this, "Catégorie modifiée avec succès", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            long insertResult = db.insertCategorie(categorie);
+            success = (insertResult != -1);
+            if (success) {
+                Toast.makeText(this, "Catégorie créée avec succès", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (success) {
             finish();
         } else {
-            Toast.makeText(this, "Erreur lors de l'enregistrement", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erreur lors de l'opération", Toast.LENGTH_SHORT).show();
         }
     }
 }
