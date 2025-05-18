@@ -31,6 +31,28 @@
             android:minLines="3"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:background="#DDDDDD"/>
+
+        <Button
+            android:id="@+id/btnTakePhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Prendre une photo"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+
     <Spinner
         android:id="@+id/spinnerAuteur"
         android:layout_width="match_parent"
