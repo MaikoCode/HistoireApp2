@@ -7,6 +7,6 @@ Vous trouverez ci-dessous une vidéo illustrant les principales fonctionnalités
 
 ## 📱 Aperçu de l'application
 
-[![Regarder la démo](./demo.mp4)](https://www.youtube.com/watch?v=ID_DE_LA_VIDEO)
+[![Regarder la démo]](./demo.mp4)
 *Cliquez sur l'image pour lancer la vidéo.*
 
